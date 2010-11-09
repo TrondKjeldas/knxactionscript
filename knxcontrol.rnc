@@ -1,0 +1,45 @@
+## Relax NG Compact schema for the KNX Action Scripts
+
+start = Config
+
+Config =
+  element config {
+    element event { EventContent }+
+ }
+  
+EventContent = (
+	 nameAttr?,
+	 groupaddrAttr,
+	 valueAttr,
+	 element action {
+	 	 nameAttr?,
+		 groupaddrAttr,
+		 valueAttr,
+		 element condition { ConditionContent }*
+	}+
+)
+
+ConditionContent = (
+	 nameAttr?,
+	 ( ConditionComboContent | ConditionGroupAndValueContent )
+)
+
+ConditionComboContent = (
+      operatorAttr,
+      element condition { ConditionContent },
+      element condition { ConditionContent }+
+)
+
+ConditionGroupAndValueContent = (
+      groupaddrAttr,
+      valueAttr
+)
+
+
+nameAttr = attribute name { text }
+
+groupaddrAttr = attribute groupaddr { text }
+
+valueAttr = attribute value { text }
+
+operatorAttr = attribute operator { "and" | "or" }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <event name="utetemp" groupaddr="3/2/0" value="">
+    <action name="some action" groupaddr="1/8/0" value="1"/>
+  </event>
+</config>
