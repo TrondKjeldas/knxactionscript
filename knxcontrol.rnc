@@ -4,37 +4,40 @@ start = Config
 
 Config =
   element config {
-    element event { EventContent }+
+    
+    element events { element event { EventContent }+ },
+
+    element actions { element action { ActionContent }+ },
+
+    element logic { element onEvent { logicContent}+ }
  }
   
 EventContent = (
 	 nameAttr?,
 	 groupaddrAttr,
-	 valueAttr,
-	 element action {
-	 	 nameAttr?,
-		 groupaddrAttr,
-		 valueAttr,
-		 element condition { ConditionContent }*
-	}+
+	 valueAttr
 )
 
-ConditionContent = (
-	 nameAttr?,
-	 ( ConditionComboContent | ConditionGroupAndValueContent )
+ActionContent = (
+	       	 nameAttr?,
+		 (element knxAction { KnxActionContent } | element serialAction { SerialActionContent })
 )
 
-ConditionComboContent = (
-      operatorAttr,
-      element condition { ConditionContent },
-      element condition { ConditionContent }+
+KnxActionContent = (
+	groupaddrAttr,
+	valueAttr
 )
 
-ConditionGroupAndValueContent = (
-      groupaddrAttr,
-      valueAttr
+SerialActionContent = (
+	attribute port { text },
+	attribute speed { text },
+	attribute cmdString { text }
 )
 
+logicContent = (
+	     attribute eventName { text },
+	     attribute actionName { text }
+)
 
 nameAttr = attribute name { text }
 
@@ -42,4 +45,3 @@ groupaddrAttr = attribute groupaddr { text }
 
 valueAttr = attribute value { text }
 
-operatorAttr = attribute operator { "and" | "or" }
