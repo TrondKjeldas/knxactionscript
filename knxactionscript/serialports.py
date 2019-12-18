@@ -6,28 +6,29 @@ running_threads = {}
 callBacks = {}
 open_ports = {}
 
-class SerialPort:
+
+class SerialPort(object):
 
     def __init__(self, port, speed):
         self.port = port
         self.speed = speed
-        
-        print "New serial port: %s" %(port)
+
+        print("New serial port: %s" % port)
 
         if self.port not in open_ports.keys():
-            print "SerialPort: Opening %s" %self.port
+            print("SerialPort: Opening %s" % self.port)
             open_ports[self.port] = Serial(self.port, self.speed)
             sleep(1)
             open_ports[self.port].setTimeout(1)
             open_ports[self.port].write("\r")
 
         if self.port not in running_threads.keys():
-            t = Thread(name="T_%s"%port, target=self.run, args=[self.port])
+            t = Thread(name="T_%s" % port, target=self.run, args=[self.port])
             running_threads[self.port] = t
             t.start()
-        
+
     def __repr__(self):
-        return "SerialPort: %s %s" %(self.port, self.speed)
+        return "SerialPort: %s %s" % (self.port, self.speed)
 
     def write(self, string):
         open_ports[self.port].write(string)
@@ -35,20 +36,20 @@ class SerialPort:
 
     def run(self, port):
 
-        #print "SerialPort: starting thread..."
-        print port
+        # print "SerialPort: starting thread..."
+        print(port)
         while port in running_threads.keys():
             string = open_ports[port].readline()
             string = string.strip()
-            if len(string)>0:
+            if len(string) > 0:
                 if port in callBacks.keys():
                     for cb in callBacks[port]:
                         cb(string)
-        print "SerialPort: ending thread..."
+        print("SerialPort: ending thread...")
 
     def addCallback(self, callBack):
 
-        if not self.port in callBacks.keys():
+        if self.port not in callBacks.keys():
             callBacks[self.port] = []
 
         callBacks[self.port].append(callBack)
@@ -58,20 +59,21 @@ class SerialPort:
             t = running_threads[self.port]
             running_threads.pop(self.port, None)
             t.join()
-    
+
 
 if __name__ == "__main__":
 
     def cb1(string):
-        print "cb1: #%s#" %string
+        print("cb1: #%s#" % string)
+
     def cb2(string):
-        print "cb2: #%s#" %string
+        print("cb2: #%s#" % string)
 
     a = SerialPort("/dev/ttyACM1", 9600)
     b = SerialPort("/dev/ttyACM1", 9600)
 
-    print a
-    print b
+    print(a)
+    print(b)
 
     a.addCallback(cb1)
     b.addCallback(cb2)

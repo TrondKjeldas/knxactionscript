@@ -1,30 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
   <events>
-    <event name="RO8OFF" groupaddr="1/0/16" value="00" />
-    <event name="RO8ON" groupaddr="1/0/16" value="01" />
-    <event name="RO13" groupaddr="4/0/1" value="00" />
-    
+    <event name="RO8OFF" groupaddr="2/6/0" value="0"></event>
+    <event name="RO8ON" groupaddr="5/1/0" value="15"></event>
+    <event name="RO13" groupaddr="1/1/0" value="5"></event>
+    <event name="test" groupaddr="1/1/0" value="5"></event>
+
   </events>
-  
+
   <actions>
-    <action name="RO8 OFF">
+    <action name="RO8 OFF" groupaddr="1/8/0" value="1">
       <serialAction port="/dev/ttyACM1" speed="9600" cmdString="SET RO 8 0"/>
     </action>
-    <action name="RO8 ON">
-      <serialAction port="/dev/ttyACM1" speed="9600" cmdString="SET RO 8 1"/>
+    <action name="RO8 ON" groupaddr="6/1/0" value="11">
+      <serialAction port="/dev/ttyACM1" speed="9600" cmdString="SET RO 8 0"/>
     </action>
-    <action name="RO13 ON">
-      <serialAction port="/dev/ttyACM1" speed="9600" cmdString="SET RO 13 1"/>
+
+    <action name="RO13 ON" groupaddr="6/3/0" value="13">
+      <serialAction port="/dev/ttyACM1" speed="9600" cmdString="SET RO 8 0"/>
     </action>
-    
+    <action name="some action" groupaddr="8/1/0" value="112">
+      <condition name="some name" groupaddr="2/6/0" value="5"/>
+      <serialAction port="/dev/ttyACM1" speed="9600" cmdString="SET RO 8 0"/>
+    </action>
+    <action name="some other action" groupaddr="8/1/0" value="11">
+      <serialAction port="/dev/ttyACM1" speed="9600" cmdString="SET RO 8 0"/>
+      <condition name="oc1" operator="and">
+        <condition name="c1" groupaddr="2/6/0" value="5"/>
+        <condition name="c2" groupaddr="2/6/1" value="4"/>
+        <condition name="oc2" operator="or">
+          <condition name="c3" groupaddr="9/6/0" value="3"/>
+          <condition name="c4" groupaddr="9/6/0" value="2"/>
+          <condition name="c5a" groupaddr="9/6/0" value="25"/>
+          <condition name="c5b" groupaddr="9/6/0" value="26"/>
+          <condition name="c5c" groupaddr="9/6/0" value="27"/>
+        </condition>
+      </condition>
+    </action>
+
   </actions>
-  
+
   <logic>
-    <onEvent eventName="RO8OFF" actionName="RO8 OFF" />
-    <onEvent eventName="RO8ON" actionName="RO8 ON" />
-    <onEvent eventName="RO13" actionName="RO13 ON" />
-    
+    <onEvent eventName="RO8OFF" actionName="RO8 OFF"/>
+    <onEvent eventName="RO8ON" actionName="RO8 ON"/>
+    <onEvent eventName="RO13" actionName="RO13 ON"/>
+
   </logic>
-  
+
 </config>

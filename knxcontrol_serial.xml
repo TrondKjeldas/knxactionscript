@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <events>
+    <event name="RO8OFF" groupaddr="1/0/16" value="00"/>
+    <event name="RO8ON" groupaddr="1/0/16" value="01"/>
+    <event name="RO13" groupaddr="4/0/1" value="00"/>
+
+  </events>
+
+  <actions>
+    <action name="RO8 OFF">
+      <serialAction port="/dev/ttyACM1" speed="9600" cmdString="SET RO 8 0"/>
+    </action>
+    <action name="RO8 ON">
+      <serialAction port="/dev/ttyACM1" speed="9600" cmdString="SET RO 8 1"/>
+    </action>
+    <action name="RO13 ON">
+      <serialAction port="/dev/ttyACM1" speed="9600" cmdString="SET RO 13 1"/>
+    </action>
+
+  </actions>
+
+  <logic>
+    <onEvent eventName="RO8OFF" actionName="RO8 OFF"/>
+    <onEvent eventName="RO8ON" actionName="RO8 ON"/>
+    <onEvent eventName="RO13" actionName="RO13 ON"/>
+
+  </logic>
+
+</config>
